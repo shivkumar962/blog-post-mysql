@@ -57,7 +57,7 @@ function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
-
+console.log('error',error);
   var bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
@@ -70,7 +70,10 @@ function onError(error) {
       break;
     case 'EADDRINUSE':
       console.error(bind + ' is already in use');
-      process.exit(1);
+      server.close(() => {
+        console.log('Server closed. Exiting.');
+        process.exit(0);
+      });
       break;
     default:
       throw error;
