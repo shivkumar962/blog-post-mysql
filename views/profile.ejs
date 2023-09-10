@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login-form</title>
+</head>
+
+<body>
+    <h1>Profile</h1>
+    <form action="">
+        <p>Name: <%= data.name %>
+        </p>
+        <p>Email: <%= data.email %>
+        </p>
+        <p>Phone: <%= data.mobile %>
+        </p>
+        <p>id: <%= data.id %>
+        </p>
+    </form>
+</body>
+
+<script>
+    let u = {
+        'id': '<%= data.id %>',
+        'name': '<%= data.name %>',
+        'email': '<%= data.email %>',
+        'mobile': '<%= data.mobile %>',
+        'password': '<%= data.password %>'
+    };
+    console.log('uuuuuuuuuuuu', u);
+    if (!localStorage.getItem('userData')) {
+        localStorage.setItem('userData', JSON.stringify(u));
+    }
+</script>
+
+</html>

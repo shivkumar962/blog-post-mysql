@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit-Post</title>
+</head>
+<body>
+    <form method="post" action="/update-post">
+ 
+    <h1>Title:</h1>
+    <input type="text" name="title" value="<%= post.title %>">
+    
+    <p>Content:</p>
+    <input type="text" name="content" value="<%= post.content %>"><br><br>
+    <input type="hidden" name="id" value="<%= post.postId %>"><br><br>
+    <button type="submit">Done</button>
+    </form>
+</body>
+</html>

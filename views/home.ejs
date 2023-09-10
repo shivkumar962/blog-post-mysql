@@ -1,59 +1,115 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<style>
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
 
-th, td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #DDD;
-}
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #DDD;
+    }
 
-tr:hover {background-color: #D6EEEE;}
-</style>
+    tr:hover {
+      background-color: #D6EEEE;
+    }
+
+    .log {
+      border-radius: 3px;
+      float: right;
+      margin-right: 21px;
+      margin-left: 23px;
+      padding: 4px;
+      margin: 5px;
+      border: 1px solid;
+    }
+  </style>
 </head>
+
 <body>
 
-<h2> <%= title %> </h2>
-<p>college form</p>
+  <h2>
+    <%= title %>
+  </h2>
+  <a href="/new-post-form" style="padding: 4px;border: 1px solid ;border-radius: 3px;">Create Post</a>
+  <a href="/login-form" id="login-in" target="_blank" class="log">Log In </a>
+  <a href="/registration-form" id="registration" target="_blank" class="log">Registration</a>
+  <a href="/get-profile" id="profile-icon" class="log" target="_blank" style="display: none;">Profile</a>
+  <button id="logout-btn" class="log" style="display: none;" onclick="logOut()">Logout</button>
 
-<table>
-  <tr>
-    <th>SR.</th>
-    <th>Title</th>
-    <th>created on</th>
-    <th>updated on</th> 
-  </tr>
+  <table>
+    <tr>
+      <th>SR.</th>
+      <th>Post id</th>
+      <th>Author</th>
+      <th>Title</th>
+      <th>created on</th>
+      <th>updated on</th>
+    </tr>
 
-  <% for(let i=0; i<list.length; i++) { %>
-  <tr>
-    <td> <%= i+1 %> </td>
-    <td> <%= list[i].title %> </td>
-    <td> <%= list[i].createDateTime %></td>
-    <td> <%= list[i].updatedDateTime %></td>
-    <td><a href="/view-post/<%= list[i].postId %>" target="_blank">view</a></td>
-    <td>
+    <% for(let i=0; i<list.length; i++) { %>
+      <tr>
+        <td>
+          <%= i+1 %>
+        </td>
+        <td>
+          <%= list[i].postId %>
+        </td>
+        <td>
+          <%= list[i].author %>
+        </td>
+        <td>
+          <%= list[i].title %>
+        </td>
+        <td>
+          <%= list[i].createDateTime %>
+        </td>
+        <td>
+          <%= list[i].updatedDateTime %>
+        </td>
+        <td><a href="/view-post/<%= list[i].postId %>" target="_blank">view</a></td>
+        <td><a href="/view-post-shiv/<%= list[i].postId %>" target="_blank">view Shiv</a></td>
+        <td>
 
-      <form action="/edit-user" method="put" id="<%= list[i].id %>-ed" >
-        <input type="hidden" value="<%= list[i].id %>" name="userId">
-        <button type="edit">edit</button>
-      </form>
-    </td>
+          <a href="/edit-post/<%= list[i].postId %>" target="_blank"><button>Edit</button></a>
+        </td>
 
-    <td>
-      <form action="/delete-user" method="post" id="<%= list[i].id %>-de">
-        <input type="hidden" value="<%= list[i].id %>" name="userId">
-        <button type="submit">delete</button>
-      </form>
-    </td>
-  </tr>
-  <% }%>
-</table>
+        <td>
+          <form id="<%=i %>" action="/delete-post/<%= list[i].postId %>" method="POST">
+            <input type="submit" value="Delete">
+          </form>
+        </td>
+      </tr>
+      <% }%>
+  </table>
+  <script>
+    // login-in, registration, profile-icon, logout-btn
+    let userData = localStorage.getItem('userData');
+    console.log('userDatasssssssss',userData);
+    if (userData) {
+      userData = JSON.parse(userData);
+      document.getElementById('login-in').style.display = 'none';
+      document.getElementById('registration').style.display = 'none';
 
+      document.getElementById('profile-icon').style.display = 'block';
+      document.getElementById('logout-btn').style.display = 'block';
+
+      document.getElementById('profile-icon').href = `/get-profile/${userData.id}`;
+      console.log('userData 12222', userData);
+
+    }
+
+    function logOut() {
+      console.log('logout clicked!!!');
+      localStorage.removeItem('userData');
+      window.location.reload();
+    }
+  </script>
 </body>
-</html>
 
+</html>

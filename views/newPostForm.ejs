@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Post</title>
+</head>
+<body>
+    <form method="post" action="/add-new-post">
+        <p>Title</p>
+        <input type="text" name="title">
+        <p>Content</p>
+        <input type="text" name="content">
+        <input type="hidden" name="userId" id="userid-input">
+         <button type="submit">submit</button>
+    </form>
+<script>
+        let userData = localStorage.getItem('userData');
+        if(userData){
+            userData = JSON.parse(userData);
+            console.log('userdata',userData);   
+            document.getElementById('userid-input').value = userData.id;
+        }
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "name": "narendra",
+        "mobile": "MySQL tutorial provides basic and advanced concepts of MySQL. Our MySQL tutorial is designed for beginners and professionals",
+        "email": "nk@m.co",
+        "password": "324234",
+        "createDateTime": "2023-08-26",
+        "updatedDateTime": "2023-08-26"
+    },
+    {
+        "id": 2,
+        "name": "nkkkkk",
+        "mobile": "MySQL tutorial provides basic and advanced concepts of MySQL. Our MySQL tutorial is designed for beginners and professionals",
+        "email": "mk@m.co",
+        "password": "123",
+        "createDateTime": "2023-08-26",
+        "updatedDateTime": "2023-08-26"
+    },
+    {
+        "id": 3,
+        "name": "Shiv malviya",
+        "email": "nk@mmm.co",
+        "mobile": "09928695184",
+        "password": "hema"
+    },
+    {
+        "id": 4,
+        "name": "Shiv malviya",
+        "email": "skshivkumar888@gmail.com",
+        "mobile": "09928695184",
+        "password": "123"
+    }
+]
