@@ -36,7 +36,7 @@
   <h2>
     <%= title %>
   </h2>
-  <a href="/new-post-form" style="padding: 4px;border: 1px solid ;border-radius: 3px;">Create Post</a>
+  <a href="/new-post-form" id="creat-post" style="padding: 4px;border: 1px solid ;border-radius: 3px;">Create Post</a>
   <a href="/login-form" id="login-in" target="_blank" class="log">Log In </a>
   <a href="/registration-form" id="registration" target="_blank" class="log">Registration</a>
   <a href="/get-profile" id="profile-icon" class="log" target="_blank" style="display: none;">Profile</a>
@@ -61,7 +61,7 @@
           <%= list[i].postId %>
         </td>
         <td>
-          <%= list[i].author %>
+          <%= list[i].userData.name %>
         </td>
         <td>
           <%= list[i].title %>
@@ -101,6 +101,10 @@
 
       document.getElementById('profile-icon').href = `/get-profile/${userData.id}`;
       console.log('userData 12222', userData);
+      
+     // let user = document.getItem('userData')
+      //console.log('newuser',user);
+     // document.getElementById('creat-post').href = `/new-post-form/${userData.id}` ;
 
     }
 

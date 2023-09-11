@@ -1,16 +1,31 @@
 const { dbConnection } = require('../db');
 const fs = require('fs');
 //__dirname -> gives current path
-const filePath = __dirname + '/data.txt';
-const newfilePath = __dirname + '/user.txt';
+const postDataFilePath = __dirname + '/data.txt';
+const userDataFilePath = __dirname + '/user.txt';
 const getAllPost = (req, res) => {
   // get all post from db
-  // console.log('file Path', filePath);
-  let fileData = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
-  fileData = JSON.parse(fileData);
+  // console.log('file Path', postDataFilePath);
+  let postData = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
+  let userData = fs.readFileSync(userDataFilePath, { encoding: 'utf8', flag: 'r' });
+  postData = JSON.parse(postData);
+  userData = JSON.parse(userData);
 
-  // console.log('res---------|||---->>>>>>>>>', fileData);
-  res.render('home.ejs', { title: 'Latest Blog List', list: fileData });
+   if(postData && userData) {
+    postData.forEach(post=> {
+      const userDetail = userData.find(userObj => userObj.id == post.userId);
+
+      if(userDetail){
+        post.userData = userDetail;
+      }
+      console.log("userDetail.....",post.userData );
+
+    })
+    
+   }
+
+ // console.log('res---------|||---->>>>>>>>>', postData);
+  res.render('home.ejs', { title: 'Latest Blog List', list: postData });
 }
 
 module.exports.getAllPost = getAllPost;
@@ -27,9 +42,9 @@ module.exports.createNewPostForm = (req, res) => {
 //create new post
 module.exports.addNewPost = (req, res) => {
   const data = req.body;
-  //console.log("=======req.body deta==========", data);
+  console.log("=======req.body deta==========", req.body);
 
-  let fileData = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
+  let fileData = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
    //console.log("=======datatext readFileSync==========", fileData);
 
   fileData = JSON.parse(fileData);
@@ -38,7 +53,11 @@ module.exports.addNewPost = (req, res) => {
   const id = fileData[fileData.length - 1].postId + 1;
  //console.log("iddddddddddddddddd", id)
 
- 
+
+ let usertxt = fs.readFileSync(userDataFilePath, { encoding: 'utf8', flag: 'r' });
+ usertxt = JSON.parse(usertxt);
+let userobj = usertxt.find(obj => (obj.id == data.userId ))
+ console.log("userobjjjjjjjjjjjj",userobj);
 
   const ndata = {
     postId: id,
@@ -50,11 +69,11 @@ module.exports.addNewPost = (req, res) => {
   }
 
   fileData.push(ndata);
-  // console.log("=======push(deta);==========", fileData);
+  console.log("=======push(deta);==========", ndata);
 
   fileData = JSON.stringify(fileData);
-  fs.writeFileSync(filePath, fileData);
-
+  fs.writeFileSync(postDataFilePath, fileData);
+ //res.render('home.ejs',{userobj});
   res.redirect('/');
 }
 
@@ -65,7 +84,7 @@ module.exports.getPostById = (req, res) => {
   const data = req.body;
   // console.log("=======deta==========", data);
 
-  let fileData = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
+  let fileData = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
   // console.log("=======readFileSync==========", fileData);
 
   fileData = JSON.parse(fileData);
@@ -119,7 +138,7 @@ module.exports.getPostByIdShiv = (req, res) => {
 //
 module.exports.editPostById = (req, res) => {
   // console.log('editPostById req-->>>>', req.params.id);
-  let fileData = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
+  let fileData = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
   fileData = JSON.parse(fileData);
 
   let id = req.params.id;
@@ -140,7 +159,7 @@ module.exports.editPostById = (req, res) => {
 
 module.exports.updatePost = (req, res) => {
   // console.log('req.body-------------->>>>', req.body);
-  let fileData = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
+  let fileData = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
   fileData = JSON.parse(fileData);
 
   let postData = {};
@@ -157,7 +176,7 @@ module.exports.updatePost = (req, res) => {
   }
 
 
-  fs.writeFileSync(filePath, JSON.stringify(fileData));
+  fs.writeFileSync(postDataFilePath, JSON.stringify(fileData));
   res.redirect('/');
 }
 
@@ -165,7 +184,7 @@ module.exports.deletePost = (req, res) => {
   // console.log('req.body=======', req.body);
   // console.log('req.params=======', req.params.id);
 
-  let filedata = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
+  let filedata = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
   filedata = JSON.parse(filedata);
 
   console.log('filedata', filedata);
@@ -179,7 +198,7 @@ module.exports.deletePost = (req, res) => {
     // console.log('newwwwwww', newd);
   }
 
-  fs.writeFileSync(filePath, JSON.stringify(newd));
+  fs.writeFileSync(postDataFilePath, JSON.stringify(newd));
   res.redirect('/');
 }
 
@@ -190,7 +209,7 @@ module.exports.registrationForm = (req, res) => {
 
 module.exports.succesRegistrationForm = (req, res) => {
   console.log('req.======================', req.body);
-  let newfiledata = fs.readFileSync(newfilePath, { encoding: 'utf8', flag: 'r' });
+  let newfiledata = fs.readFileSync(userDataFilePath, { encoding: 'utf8', flag: 'r' });
   newfiledata = JSON.parse(newfiledata);
   console.log('newfiledata==old======', newfiledata);
   let id = (newfiledata[newfiledata.length - 1].id) + 1;
@@ -206,7 +225,7 @@ module.exports.succesRegistrationForm = (req, res) => {
   console.log('newfiledata====new===', newfiledata);
 
   newfiledata = JSON.stringify(newfiledata);
-  fs.writeFileSync(newfilePath, newfiledata);
+  fs.writeFileSync(userDataFilePath, newfiledata);
   res.redirect('/');
 }
 
@@ -218,7 +237,7 @@ module.exports.loginForm = (req, res) => {
 //login
 module.exports.login = (req, res) => {
   console.log('req.bodyyyyyyyyy', req.body);
-  let fileData = fs.readFileSync(newfilePath, { encoding: 'utf8', flag: 'r' });
+  let fileData = fs.readFileSync(userDataFilePath, { encoding: 'utf8', flag: 'r' });
   fileData = JSON.parse(fileData);
   let user = null;
   if (fileData && Array.isArray(fileData)) {
@@ -241,7 +260,7 @@ module.exports.profile = (req, res) => {
     console.log("rrrrrrr", req.body);
     console.log('req.params---------', req.params.uId);
     // get user data
-    let userFileData = fs.readFileSync(newfilePath, { encoding: 'utf8', flag: 'r' });
+    let userFileData = fs.readFileSync(userDataFilePath, { encoding: 'utf8', flag: 'r' });
     userFileData = JSON.parse(userFileData);
 
     if (userFileData) {
@@ -250,7 +269,7 @@ module.exports.profile = (req, res) => {
     }
 
     //get post data
-    let filedata = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
+    let filedata = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
     filedata = JSON.parse(filedata);
     let datatxt = filedata.filter((itam) => itam.userId == req.params.uId);
     console.log("match_id----", datatxt);
