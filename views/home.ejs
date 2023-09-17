@@ -58,10 +58,10 @@
           <%= i+1 %>
         </td>
         <td>
-          <%= list[i].postId %>
+          <%= list[i].fkUserId %>
         </td>
         <td>
-          <%= list[i].userData.name %>
+          <%= list[i].firstName %>
         </td>
         <td>
           <%= list[i].title %>
@@ -72,16 +72,7 @@
         <td>
           <%= list[i].updatedDateTime %>
         </td>
-        <td><a href="/view-post/<%= list[i].postId %>" target="_blank">view</a></td>
-        <td><a href="/view-post-shiv/<%= list[i].postId %>" target="_blank">view Shiv</a></td>
-        <td>
-
-          <a href="/edit-post/<%= list[i].postId %>" target="_blank"><button>Edit</button></a>
-        </td>
-
-        <td>
-          <form id="<%=i %>" action="/delete-post/<%= list[i].postId %>" method="POST">
-            <input type="submit" value="Delete">
+        
           </form>
         </td>
       </tr>

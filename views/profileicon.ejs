@@ -37,13 +37,13 @@
 <body>
     <h1>Profile</h1>
     <form action="">
-        <p>Name: <%= userData.name %>
+        <p>Name: <%= userData[0].firstName %>
         </p>
-        <p>Email: <%= userData.email %>
+        <p>Email: <%= userData[0].email %>
         </p>
-        <p>Phone: <%= userData.mobile %>
+        <p>Phone: <%= userData[0].mobile %>
         </p>
-        <p>id: <%= userData.id %>
+        <p>id: <%= userData[0].pkUserId %>
         </p>
     </form>
 
@@ -57,30 +57,30 @@
             <th>created on</th>
             <th>updated on</th>
         </tr>
-        <% for(let i=0; i < datatxt.length; i++){ %>
+        <% for(let i=0; i < userData.length; i++){ %>
 
             <tr>
                 <td>
                     <%= i+1 %>
                 </td>
-                <td> postid </td>
+                <td>  <%= userData[i].pkPostId %> </td>
                 <td>
-                    <%= userData.name %>
+                    <%= userData[i].firstName %>
                 </td>
                 <td>
-                    <%= datatxt[i].title %>
+                    <%= userData[i].title %>
                 </td>
                 <td>
-                    <%= datatxt[i].createDateTime %>
+                    <%= userData[i].createDateTime %>
                 </td>
                 <td>
-                    <%= datatxt[i].updatedDateTime %>
+                    <%= userData[i].updatedDateTime %>
                 </td>
-                <td><a href="/view-post/<%= datatxt[i].postId %>" target="_blank">view</a></td>
-                <td><a href="/edit-post/<%= datatxt[i].postId %>" target="_blank"><button>Edit</button></a></td>
+                <td><a href="/view-post/<%= userData[i]. pkPostId %>" target="_blank">view</a></td>
+                <td><a href="/edit-post/<%= userData[i]. pkPostId %>" target="_blank"><button>Edit</button></a></td>
 
                 <td>
-                    <form id="<%=i %>" action="/delete-post/<%= datatxt[i].postId %>" method="POST">
+                    <form id="<%=i %>" action="/delete-post/<%= userData[i]. pkPostId %>" method="POST">
                         <input type="submit" value="Delete">
                     </form>
                 </td>

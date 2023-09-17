@@ -1,38 +1,24 @@
 const { dbConnection } = require('../db');
 const fs = require('fs');
+const { post } = require('../routes');
 //__dirname -> gives current path
 const postDataFilePath = __dirname + '/data.txt';
 const userDataFilePath = __dirname + '/user.txt';
 const getAllPost = (req, res) => {
-  // get all post from db
-  // console.log('file Path', postDataFilePath);
-  let postData = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
-  let userData = fs.readFileSync(userDataFilePath, { encoding: 'utf8', flag: 'r' });
-  postData = JSON.parse(postData);
-  userData = JSON.parse(userData);
+  //const sql = `SELECT pkPostId as postId , fkUserId as author, title,createDateTime,updatedDateTime FROM post`;
+  const sql = `SELECT users.firstName, post.*  FROM post
+  LEFT JOIN users ON (post.fkUserId = users.pkUserId)`;
+  dbConnection.query(sql, function (err, result, fields) {
+    if (err) {
+      res.send("error to get post");
+      return;
+    }
 
-   if(postData && userData) {
-    postData.forEach(post=> {
-      const userDetail = userData.find(userObj => userObj.id == post.userId);
-
-      if(userDetail){
-        post.userData = userDetail;
-      }
-      console.log("userDetail.....",post.userData );
-
-    })
-    
-   }
-
- // console.log('res---------|||---->>>>>>>>>', postData);
-  res.render('home.ejs', { title: 'Latest Blog List', list: postData });
+    //console.log("result", result);
+    res.render('home.ejs', { title: 'Latest Blog List', list: result });
+  })
 }
-
 module.exports.getAllPost = getAllPost;
-
-
-
-
 
 //new post form
 module.exports.createNewPostForm = (req, res) => {
@@ -44,162 +30,108 @@ module.exports.addNewPost = (req, res) => {
   const data = req.body;
   console.log("=======req.body deta==========", req.body);
 
-  let fileData = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
-   //console.log("=======datatext readFileSync==========", fileData);
-
-  fileData = JSON.parse(fileData);
-   //console.log("=======datatext JSON==========", fileData);
-
-  const id = fileData[fileData.length - 1].postId + 1;
- //console.log("iddddddddddddddddd", id)
-
-
- let usertxt = fs.readFileSync(userDataFilePath, { encoding: 'utf8', flag: 'r' });
- usertxt = JSON.parse(usertxt);
-let userobj = usertxt.find(obj => (obj.id == data.userId ))
- console.log("userobjjjjjjjjjjjj",userobj);
-
-  const ndata = {
-    postId: id,
-    title: data.title,
-    content: data.content,
-    createDateTime: new Date(),
-    updatedDateTime: new Date(),
-    userId : data.userId
-  }
-
-  fileData.push(ndata);
-  console.log("=======push(deta);==========", ndata);
-
-  fileData = JSON.stringify(fileData);
-  fs.writeFileSync(postDataFilePath, fileData);
- //res.render('home.ejs',{userobj});
-  res.redirect('/');
+  const sql = `INSERT INTO post (fkUserId, title, content, createDateTime , updatedDateTime ) 
+  values(${req.body.userId} , '${req.body.title}', ' ${req.body.content}',now(),now() ) `;
+  dbConnection.query(sql, function (err, result, fields) {
+    if (err) {
+      res.send('add new post err')
+    }
+    res.redirect('/');
+  })
 }
 
 //get post by id
 module.exports.getPostById = (req, res) => {
   // console.log('req-->>>>', req.params.id);
 
-  const data = req.body;
-  // console.log("=======deta==========", data);
-
-  let fileData = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
-  // console.log("=======readFileSync==========", fileData);
-
-  fileData = JSON.parse(fileData);
-  // console.log("=======JSON==========", fileData);
 
   const id = req.params.id;
+  console.log("=======JSON==========", id);
 
-  let newdata = {};
-  for (let i = 0; i < fileData.length; i++) {
-
-    if (fileData[i].postId == id) {
-      newdata = fileData[i]
-      // console.log("newdata========================", newdata);
-      break;
-    }
-
-
-  }
-
-
-
-  res.render('postView.ejs', { post: newdata });
-}
-
-
-///view-post-shiv
-module.exports.getPostByIdShiv = (req, res) => {
-  const sql = `SELECT pkPostId as postId ,fkUserId as userId, title, content, createDateTime, updatedDateTime, recordStatus  
-    FROM post WHERE recordStatus = '1' and pkPostId = ${req.params.id}`;
-
+  const sql = `SELECT * FROM post`;
   dbConnection.query(sql, function (err, result, fields) {
     if (err) {
       res.send("error to get post");
       return;
     }
-    // console.log('shiv_sql------------>>>>>>>>>', sql);
-    // console.log('shiv_result------------>>>>>>>>>', result);
 
-    const p = result[0]
-    const postData = {
-      title: p.title,
-      content: p.content,
-      createdDate: p.createDateTime,
-      updatedDate: p.updatedDateTime,
+    //console.log("result", result);
+
+    let newdata = {};
+    for (let i = 0; i < result.length; i++) {
+
+      if (result[i].pkPostId == id) {
+        newdata = result[i]
+        // console.log("newdata========================", newdata);
+        break;
+      }
     }
+    res.render('postView.ejs', { post: newdata });
 
-    res.render("postView.ejs", { post: postData });
   })
 }
 
 //
 module.exports.editPostById = (req, res) => {
   // console.log('editPostById req-->>>>', req.params.id);
-  let fileData = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
-  fileData = JSON.parse(fileData);
-
   let id = req.params.id;
   // console.log('--------id=======', id);
 
-  let newdata = {};
-  for (let i = 0; i < fileData.length; i++) {
-    if (fileData[i].postId == id) {
-      newdata = fileData[i];
+  const sql = `SELECT * FROM post`;
+  dbConnection.query(sql, function (err, result, fields) {
+    if (err) {
+      res.send("error to get post");
+      return;
     }
-  }
-  // console.log('--------newdata=======', newdata);
 
-  res.render('edit.ejs', { post: newdata });
+    //console.log("result", result);
 
 
+
+    let newdata = {};
+    for (let i = 0; i < result.length; i++) {
+      if (result[i].pkPostId == id) {
+        newdata = result[i];
+      }
+    }
+    // console.log('--------newdata=======', newdata);
+
+    res.render('edit.ejs', { post: newdata });
+
+
+  })
 }
 
 module.exports.updatePost = (req, res) => {
-  // console.log('req.body-------------->>>>', req.body);
-  let fileData = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
-  fileData = JSON.parse(fileData);
+  console.log('req.body-------------->>>>', req.body);
 
-  let postData = {};
-  if (fileData) {
-    postData = fileData.find((item) => item.postId == req.body.id);
-    // console.log("===========findpostData=======", postData);
+  const sql = `update post set title = '${req.body.title}', content = '${req.body.content}',
+                    updatedDateTime = now() where pkPostId =  '${req.body.id}'`;
 
-    if (postData) {
-      postData.title = req.body.title;
-      postData.content = req.body.content;
-      postData.updatedDateTime = new Date();
+  dbConnection.query(sql, function (err, result, fields) {
+    console.log('result', err);
+
+    if (err) {
+      res.send('err get update post')
+      return;
     }
-    // console.log("===========lastpostData=======", postData);
-  }
+    res.redirect('/');
+  })
 
-
-  fs.writeFileSync(postDataFilePath, JSON.stringify(fileData));
-  res.redirect('/');
 }
 
 module.exports.deletePost = (req, res) => {
   // console.log('req.body=======', req.body);
   // console.log('req.params=======', req.params.id);
 
-  let filedata = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
-  filedata = JSON.parse(filedata);
+  const sql = `delete from post where pkPostId = '${req.params.id}'`;
+  dbConnection.query(sql, function (err, result, fields) {
+    if (err) {
+      res.send('err delete post');
+    }
+    res.redirect('/');
 
-  console.log('filedata', filedata);
-
-
-  let newd = [];
-
-
-  if (filedata) {
-    newd = filedata.filter((itam) => itam.postId != req.params.id);
-    // console.log('newwwwwww', newd);
-  }
-
-  fs.writeFileSync(postDataFilePath, JSON.stringify(newd));
-  res.redirect('/');
+  })
 }
 
 module.exports.registrationForm = (req, res) => {
@@ -237,20 +169,18 @@ module.exports.loginForm = (req, res) => {
 //login
 module.exports.login = (req, res) => {
   console.log('req.bodyyyyyyyyy', req.body);
-  let fileData = fs.readFileSync(userDataFilePath, { encoding: 'utf8', flag: 'r' });
-  fileData = JSON.parse(fileData);
-  let user = null;
-  if (fileData && Array.isArray(fileData)) {
-    user = fileData.find(userObj => userObj.email == req.body.email && userObj.password == req.body.password);
-    console.log('userrrrrrrrrrrrr', user);
-  }
-  if (!user) {
-    res.send('invalid username password');
-    return;
-  }
+  const sql = `SELECT * FROM users WHERE email = '${req.body.email}' AND password = '${req.body.password}'`;
+  console.log("sqlqqqqqqqqqq", sql);
+  dbConnection.query(sql, function (err, result, fields) {
+    console.log('resultttttttttt', result);
+    if (result.length == 0) {
+      res.send('invalid');
+    }
+    //user found
+    res.render('profile.ejs', { data: result[0] });
+  })
 
-  //user found
-  res.render('profile.ejs', { data: user })
+
 }
 
 //get-profile
@@ -260,29 +190,19 @@ module.exports.profile = (req, res) => {
     console.log("rrrrrrr", req.body);
     console.log('req.params---------', req.params.uId);
     // get user data
-    let userFileData = fs.readFileSync(userDataFilePath, { encoding: 'utf8', flag: 'r' });
-    userFileData = JSON.parse(userFileData);
 
-    if (userFileData) {
-      userData = userFileData.find((itam) => itam.id == req.params.uId);
-      console.log('userDatasssssss', userData);
-    }
+    const sql = `SELECT * FROM users
+    LEFT JOIN post ON users.pkUserId = post.fkUserId where users.pkUserId = '${req.params.uId}'`;
+    dbConnection.query(sql, function (err, result, fields) {
+      console.log('result========', result);
 
-    //get post data
-    let filedata = fs.readFileSync(postDataFilePath, { encoding: 'utf8', flag: 'r' });
-    filedata = JSON.parse(filedata);
-    let datatxt = filedata.filter((itam) => itam.userId == req.params.uId);
-    console.log("match_id----", datatxt);
-
-    
-
-
-
-    //get user data by id
-    res.render('profileicon.ejs', {userData ,datatxt });
+      if (err) {
+        res.send('invalid profile');
+      }
+      //get user data by id
+      res.render('profileicon.ejs', { userData: result });
+    });
   }
-
-
   catch (error) {
     console.log('profile page error', error);
   }

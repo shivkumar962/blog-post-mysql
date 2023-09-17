@@ -19,9 +19,6 @@ router.get('/', postController.getAllPost);
 //view full post by id
 router.get('/view-post/:id', postController.getPostById);
 
-//shiv router
-router.get('/view-post-shiv/:id', postController.getPostByIdShiv);
-
 
 //edit post
 router.get('/edit-post/:id', postController.editPostById);

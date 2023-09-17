@@ -9,27 +9,28 @@
 
 <body>
     <h1>Profile</h1>
-    <form action="">
-        <p>Name: <%= data.name %>
+    <div>
+        <p>Name: <%= data.firstName %>
         </p>
         <p>Email: <%= data.email %>
         </p>
         <p>Phone: <%= data.mobile %>
         </p>
-        <p>id: <%= data.id %>
+        <p>id: <%= data.pkUserId %>
         </p>
-    </form>
+    </div>
 </body>
 
 <script>
     let u = {
-        'id': '<%= data.id %>',
-        'name': '<%= data.name %>',
+        'id': '<%= data.pkUserId %>',
+        'name': '<%= data.firstName %>',
         'email': '<%= data.email %>',
         'mobile': '<%= data.mobile %>',
         'password': '<%= data.password %>'
     };
     console.log('uuuuuuuuuuuu', u);
+    console.log('sssssssssss',localStorage.getItem('userData'));
     if (!localStorage.getItem('userData')) {
         localStorage.setItem('userData', JSON.stringify(u));
     }
