@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <!-- basic -->
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <!-- mobile metas -->
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+   <!-- site metas -->
+   <title>view</title>
+   <meta name="keywords" content="">
+   <meta name="description" content="">
+   <meta name="author" content="">
+   <!-- bootstrap css -->
+   <link rel="stylesheet" type="text/css" href="/stylesheets/css/bootstrap.min.css">
+   <!-- style css -->
+   <link rel="stylesheet" type="text/css" href="/stylesheets/css/style.css">
+   <!-- Responsive-->
+   <link rel="stylesheet" href="/stylesheets/css/responsive.css">
+   <!-- fevicon -->
+   <link rel="icon" href="/images/fevicon.png" type="image/gif" />
+   <!-- Scrollbar Custom CSS -->
+   <link rel="stylesheet" href="/stylesheets/css/jquery.mCustomScrollbar.min.css">
+   <!-- Tweaks for older IEs-->
+   <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+   <!-- fonts -->
+   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+   <!-- owl stylesheets -->
+   <link rel="stylesheet" href="/stylesheets/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="/stylesheets/css/owl.theme.default.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
+      media="screen">
+
+
+</head>
+
+<body>
+   <%-  include('header.ejs') %>
+
+      <div class="braber_taital_main">
+         <div class="row">
+            <div class="col-lg-6">
+               <div class="barber_bg_main">
+                  <h1 class="barber_taital">
+                     <%= list[0].title %>
+                  </h1>
+                  <p class="barber_text">
+                     <%= list[0].content %>
+                  </p>
+                  <div class="blogr_main">
+                     <div class="blogr_left">
+                        <p class="post_text">Post By : Blogr</p>
+                     </div>
+                     <div class="blogr_right">
+                        <div class="comment_text">
+                           <ul>
+                              <!-- <li><a href="/view">View<span class="padding_10"><i class="fa fa-comment"></i></span></a> -->
+                              </li>
+                              <li><a href="#">Like<span class="padding_10"><i class="fa fa-thumbs-up"></i></span></a>
+                              </li>
+                              <!-- comment syntex -->
+                              <!--     <li><a href="/comment">Comment<span class="padding_10"><i
+                                          class="fa fa-comment"></i></span></a></li>  -->
+                              <li><a href="#">Share<span class="padding_10"><i class="fa fa-share-alt"
+                                          aria-hidden="true"></i></span></a></li>
+                           </ul>
+
+                        </div>
+                     </div>
+                  </div>
+                  <h1>comments</h1>
+                  <div>
+                     
+                  </div>
+                  <div>
+                      <style>
+                        .comment {
+                           border-radius: 5px;
+                           width: 98.6%;
+                           height: 100px;
+                           padding: 10px;
+                           background-color: #d0e2bc;
+                        }
+                     </style> 
+
+
+
+                     <form id="comment-form" onsubmit="addNewComment()">
+                        <textarea name="commit" class="comment" placeholder=" Type your comment here."></textarea>
+                        <br>
+                        <input type="hidden" id="user" name="userid">
+                        <input type="hidden" id="post" name="postid" value="<%= list[0].pkPostId %>">
+
+                        <button type="submit" style="border-radius: 3px; background-color: forestgreen;" >comment</button>
+                     </form>
+                  </div>
+               </div>
+            </div>
+            <div class="col-lg-6">
+               <div class="fashion_img">
+                  <img src="/images/img-1.png" class="fashion_img">
+                  <div class="read_bt"><a href="#">04<br>FEB</a></div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+        
+         <script>
+            let user= localStorage.getItem('userData');
+            user = JSON.parse(user);
+         
+            if(user){
+               document.getElementById("user").value = user.id;
+            }
+            // -------------------------------
+            
+            // Get the form and button element by their IDs
+            const form = document.getElementById('comment-form');
+            const submitButton = document.getElementById('submitButton');
+
+            // Add a click event listener to the button
+            submitButton.addEventListener('click', function(event) {
+               // Prevent the default form submission behavior
+               event.preventDefault();
+
+               // Get the form data
+               const formData = new FormData(form);
+
+               // Do something with the form data, for example, send it to the server using AJAX
+               // Here, you can perform form validation, manipulate the data, or send it to a server endpoint
+               // For example:
+               // fetch('/submit', {
+               //     method: 'POST',
+               //     body: formData
+               // })
+               // .then(response => response.json())
+               // .then(data => {
+               //     console.log(data);
+               // })
+               // .catch(error => {
+               //     console.error(error);
+               // });
+            });
+
+         </script>
+          <script>
+            function openNav() {
+               document.getElementById("myNav").style.width = "100%";
+            }
+            function closeNav() {
+               document.getElementById("myNav").style.width = "0%";
+            }
+         </script>
+         <script src="/javascripts/jquery.min.js"></script>
+         <script src="/javascripts/popper.min.js"></script>
+         <script src="/javascripts/bootstrap.bundle.min.js"></script>
+         <script src="/javascripts/jquery-3.0.0.min.js"></script>
+         <script src="/javascripts/plugin.js"></script>
+         <!-- sidebar -->
+         <script src="/javascripts/jquery.mCustomScrollbar.concat.min.js"></script>
+         <script src="/javascripts/custom.js"></script>
+         <!-- javascript -->
+         <script src="/javascripts/owl.carousel.js"></script>
+         <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+         <script>
+            $(document).ready(function () {
+               $(".fancybox").fancybox({
+                  openEffect: "none",
+                  closeEffect: "none"
+               });
+
+               $(".zoom").hover(function () {
+
+                  $(this).addClass('transition');
+               }, function () {
+
+                  $(this).removeClass('transition');
+               });
+            });
+         </script>
+        
+</body>
+
+</html>

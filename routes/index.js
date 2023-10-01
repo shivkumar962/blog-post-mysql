@@ -15,6 +15,9 @@ const postController = require('../controller/post');
 /* GET home page. */
 router.get('/', postController.getAllPost);
 
+router.get('/get-all-post-json', postController.getAllPostJSON);
+
+
 
 //view full post by id
 router.get('/view-post/:id', postController.getPostById);
@@ -23,17 +26,12 @@ router.get('/view-post/:id', postController.getPostById);
 //edit post
 router.get('/edit-post/:id', postController.editPostById);
 
-//update post post 
-router.post('/update-post', postController.updatePost);
-
 //form create post 
 router.get('/new-post-form', postController.createNewPostForm);
 
 //create new post 
 router.post('/add-new-post', postController.addNewPost)
 
-//delete-user
-router.post('/delete-post/:id', postController.deletePost);
 
 //Registration Form
 router.get('/registration-form', postController.registrationForm);
@@ -49,6 +47,51 @@ router.post('/login', postController.login);
 
 //get-profile
 router.get('/get-profile/:uId', postController.profile);
+
+//comment form
+ router.get('/comment', postController.comment);
+
+ 
+//view post
+router.get('/viewpost/:viewid', postController.view);
+
+//profile
+router.get('/profile', postController.profileican);
+
+//about
+router.get('/about', postController.about);
+
+
+//contact
+router.get('/contact', postController.contact);
+
+//form create post 
+router.post('/new-post-form', postController.createNewPostForm);
+
+
+//my post 
+router.get('/mypost/:id', postController.mypost);
+
+
+//edit-post-form 
+router.get('/edit-post-form/:id', postController.editPostForm);
+
+
+//update post post 
+router.post('/update-post', postController.updatePost);
+
+
+
+//delete-user
+router.post('/delete-post/:id', postController.deletePost);
+
+//comment
+router.post('/comment', postController.Comment);
+
+
+
+
+
 
 
 

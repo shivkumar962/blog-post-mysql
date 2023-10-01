@@ -14,23 +14,23 @@
       <meta name="description" content="">
       <meta name="author" content="">
       <!-- bootstrap css -->
-      <link rel="stylesheet" type="text/css" href="/stylesheets/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="stylesheets/css/bootstrap.min.css">
       <!-- style css -->
-      <link rel="stylesheet" type="text/css" href="/stylesheets/css/style.css">
+      <link rel="stylesheet" type="text/css" href="stylesheets/css/style.css">
       <!-- Responsive-->
-      <link rel="stylesheet" href="/stylesheets/css/responsive.css">
+      <link rel="stylesheet" href="css/responsive.css">
       <!-- fevicon -->
       <link rel="icon" href="images/fevicon.png" type="image/gif" />
       <!-- Scrollbar Custom CSS -->
-      <link rel="stylesheet" href="/stylesheets/css/jquery.mCustomScrollbar.min.css">
+      <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
       <!-- fonts -->
       <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <!-- owl stylesheets --> 
-      <link rel="stylesheet" href="/stylesheets/css/owl.carousel.min.css">
-      <link rel="stylesheet" href="/stylesheets/css/owl.theme.default.min.css">
+      <link rel="stylesheet" href="css/owl.carousel.min.css">
+      <link rel="stylesheet" href="css/owl.theme.default.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
    </head>
    <body>
@@ -39,43 +39,26 @@
          <div class="container-fluid">
             <div class="row">
                <div class="col-sm-12">
-                  <div class="logo"><a href="index.html"><img src="/images/logo.png"></a></div>
-                  
-                    
-                  
+                  <div class="logo"><a href="index.html"><img src="images/logo.png"></a></div>
                   <div class="menu_text">
                      <ul>
                         <div class="togle_3">
-                           <div class="shoping_bag"> 
-                              
-                              <a href="#">Home</a>&nbsp;&nbsp;&nbsp;
-                              <a href="/about">About</a>&nbsp;&nbsp;&nbsp;
-                              <a href="/contact">Contact</a>&nbsp;&nbsp;&nbsp;
-                              <a href="#">Service</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                              
-                              <a href="/profile" ><img src="/images/user-icon.png" style="display: none;" id="user-icon.png" ></a>
-                              <span class="padding_left_40"><a href="#"><img src="/images/search-icon.png"></a></span>
-                              <span class="padding_left_40"><a href="/new-post-form"style="display:none;" id="creat-new-post" >Creat new post</a></span>
-                              <span class="padding_left_40"><a href="/mypost"style="display:none;" id="mypost" >My Post</a></span>
-
-
+                           <div class="shoping_bag"><a href="#"><img src="images/user-icon.png"></a>
+                              <span class="padding_left_40"><a href="#"><img src="images/search-icon.png"></a></span>
                            </div>
-                            <div id="myNav" class="overlay">
+                           <div id="myNav" class="overlay">
                               <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                               <div class="overlay-content">
                                  <a href="index.html">Home</a>
-                                 <a href="about">About</a>
+                                 <a href="about.html">About</a>
                                  <a href="blog.html">Blog</a>
                                  <a href="contact.html">Testimonial</a>
                                  <a href="contact.html">Contact</a>
                               </div>
                            </div>
-                           <button id="logout" onclick="logout()" style="color: rgb(70, 111, 9); display: none;">Logout</button>
-                           <a href="/login-form" id="login" style="color: rgb(70, 111, 9);">Login</a>&nbsp;
-                           <a href="/registration-form" id="registration" style="color: rgb(70, 111, 9);">Registration</a>
-                           <!-- <span class="navbar-toggler-icon"></span>
-                           <span onclick="openNav()"><img src="images/toogle-icon.png" class="toggle_menu"></span> -->
-                        </div> 
+                           <span class="navbar-toggler-icon"></span>
+                           <span onclick="openNav()"><img src="images/toogle-icon.png" class="toggle_menu"></span>
+                        </div>
                      </ul>
                   </div>
                </div>
@@ -88,20 +71,20 @@
                   <div class="col-md-6">
                      <div class="banner_taital_section">
                         <h1 class="design_taital">We Do Design Blog For Business</h1>
-                        <div class="contact_bt"><a href="google.com">Contact Us</a></div>
+                        <div class="contact_bt"><a href="#">Contact Us</a></div>
                      </div>
                   </div>
                   <div class="col-md-6">
                      <div id="main_slider" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
                            <div class="carousel-item active">
-                              <div class="banner_img"><img src="/images/banner-img.png"></div>
+                              <div class="banner_img"><img src="images/banner-img.png"></div>
                            </div>
                            <div class="carousel-item">
-                              <div class="banner_img"><img src="/images/banner-img.png"></div>
+                              <div class="banner_img"><img src="images/banner-img.png"></div>
                            </div>
                            <div class="carousel-item">
-                              <div class="banner_img"><img src="/images/banner-img.png"></div>
+                              <div class="banner_img"><img src="images/banner-img.png"></div>
                            </div>
                         </div>
                         <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
@@ -119,48 +102,44 @@
       </div>
       <!-- header section end -->
       <!-- barber section start -->
-      <div class="barber_section layout_padding"><h1 class="barber_taital "style="text-align: -webkit-center;" >Public Post</h1>
+      <div class="barber_section layout_padding">
          <div class="container">
-            <%for(let i = 0; i < list.length; i++){ %>
-               <div class="braber_taital_main">
-                  <div class="row">
-                     <div class="col-lg-6">
-                        <div class="barber_bg_main">
-                           <h1 class="barber_taital"><%= list[i].title %></h1>
-                           <p class="barber_text"><%= list[i].content %></p>
-                           <div class="blogr_main">
-                              <div class="blogr_left">
-                                 <p class="post_text">Post By :  Blogr</p>
-                              </div>
-                              <div class="blogr_right">
-                                 <div class="comment_text">
-
-                                       <li id="vie" style="display:;"><a href="/viewpost/<%= list[i].pkPostId %>" >View<span class="padding_10"><i class="fa fa-comment"></i></span></a></li>
-                                       <li><a href="#">Like<span class="padding_10"><i class="fa fa-thumbs-up"></i></span></a></li>
-                                       <!-- <li><a href="/comment">Comment<span class="padding_10"><i class="fa fa-comment"></i></span></a></li> -->
-                                       <li><a href="#">Share<span class="padding_10"><i class="fa fa-share-alt" aria-hidden="true"></i></span></a></li>
-                                    </ul>
-                                 </div>
+            <div class="braber_taital_main">
+               <div class="row">
+                  <div class="col-lg-6">
+                     <div class="barber_bg_main">
+                        <h1 class="barber_taital">Jhonson Barber is</h1>
+                        <p class="barber_text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the lik</p>
+                        <div class="blogr_main">
+                           <div class="blogr_left">
+                              <p class="post_text">Post By :  Blogr</p>
+                           </div>
+                           <div class="blogr_right">
+                              <div class="comment_text">
+                                 <ul>
+                                    <li><a href="#">Like<span class="padding_10"><i class="fa fa-thumbs-up"></i></span></a></li>
+                                    <li><a href="#">Comment<span class="padding_10"><i class="fa fa-comment"></i></span></a></li>
+                                    <li><a href="#">Share<span class="padding_10"><i class="fa fa-share-alt" aria-hidden="true"></i></span></a></li>
+                                 </ul>
                               </div>
                            </div>
                         </div>
                      </div>
-                     <div class="col-lg-6">
-                        <div class="fashion_img">
-                           <img src="/images/img-1.png" class="fashion_img">
-                           <div class="read_bt"><a href="#">04<br>FEB</a></div>
-                        </div>
+                  </div>
+                  <div class="col-lg-6">
+                     <div class="fashion_img">
+                        <img src="images/img-1.png" class="fashion_img">
+                        <div class="read_bt"><a href="#">04<br>FEB</a></div>
                      </div>
                   </div>
                </div>
-            <%}%>
-            
-            <!-- <div class="braber_taital_main">
+            </div>
+            <div class="braber_taital_main">
                <div class="row">
                   <div class="col-lg-6">
                      <div class="barber_bg_main">
                         <h1 class="barber_taital">Save Plants </h1>
-                        <p class="barber_text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the lik</p>
+                        <p class="barber_text">I sometimes on purpose (injected humour and the lik</p>
                         <div class="blogr_main">
                            <div class="blogr_left">
                               <p class="post_text">Post By :  Blogr</p>
@@ -214,7 +193,7 @@
                      </div>
                   </div>
                </div>
-            </div> -->
+            </div>
          </div>
       </div>
       <!-- barber section end -->
@@ -262,7 +241,7 @@
                            <div class="carousel-item active">
                               <h1 class="testimonial_taital">Testimonial</h1>
                               <div class="testimonial_left">
-                                 <div class="client_img"><img src="/images/client-img.png"></div>
+                                 <div class="client_img"><img src="images/client-img.png"></div>
                               </div>
                               <div class="testimonial_right">
                                  <h1 class="jack_text">Hindona</h1>
@@ -273,7 +252,7 @@
                            <div class="carousel-item">
                               <h1 class="testimonial_taital">Testimonial</h1>
                               <div class="testimonial_left">
-                                 <div class="client_img"><img src="/images/client-img.png"></div>
+                                 <div class="client_img"><img src="images/client-img.png"></div>
                               </div>
                               <div class="testimonial_right">
                                  <h1 class="jack_text">Hindona</h1>
@@ -284,7 +263,7 @@
                            <div class="carousel-item">
                               <h1 class="testimonial_taital">Testimonial</h1>
                               <div class="testimonial_left">
-                                 <div class="client_img"><img src="/images/client-img.png"></div>
+                                 <div class="client_img"><img src="images/client-img.png"></div>
                               </div>
                               <div class="testimonial_right">
                                  <h1 class="jack_text">Hindona</h1>
@@ -310,7 +289,7 @@
       <div class="footer_section layout_padding">
          <div class="container">
             <div class="footer_main">
-               <div class="footer_logo"><a href="index.html"><img src="/images/footer-logo.png"></a></div>
+               <div class="footer_logo"><a href="index.html"><img src="images/footer-logo.png"></a></div>
                <div class="footer_menu">
                   <ul>
                      <li><a href="index.html">Home</a></li>
@@ -322,10 +301,10 @@
                </div>
                <div class="social_icon">
                   <ul>
-                     <li><a href="#"><img src="/images/fb-icon.png"></a></li>
-                     <li><a href="#"><img src="/images/twitter-icon.png"></a></li>
-                     <li><a href="#"><img src="/images/linkedin-icon.png"></a></li>
-                     <li><a href="#"><img src="/images/instagram-icon.png"></a></li>
+                     <li><a href="#"><img src="images/fb-icon.png"></a></li>
+                     <li><a href="#"><img src="images/twitter-icon.png"></a></li>
+                     <li><a href="#"><img src="images/linkedin-icon.png"></a></li>
+                     <li><a href="#"><img src="images/instagram-icon.png"></a></li>
                   </ul>
                </div>
             </div>
@@ -343,11 +322,11 @@
             <div class="location_text">
                <ul>
                   <li>
-                     <a href="#"><img src="/images/call-icon.png">
+                     <a href="#"><img src="images/call-icon.png">
                      <span class="padding_15">Call +01 1234567890</span></a>
                   </li>
                   <li>
-                     <a href="#"><img src="/images/mail-icon.png">
+                     <a href="#"><img src="images/mail-icon.png">
                      <span class="padding_15">demo@gmail.com</span></a>
                   </li>
                </ul>
@@ -367,27 +346,16 @@
       </div>
       <!-- copyright section end -->
       <!-- Javascript files-->
-      <script>
-
-         // fetch('http://localhost:3000/get-all-post-json')
-         //    .then(res=> res.json())
-         //    .then(result=> {
-         //       console.log('fetch result --------------->>>>>>>',result);
-               
-         //    })
-
-      </script>
-
-      <script src="/javascripts/jquery.min.js"></script>
-      <script src="/javascripts/popper.min.js"></script>
-      <script src="/javascripts/bootstrap.bundle.min.js"></script>
-      <script src="/javascripts/jquery-3.0.0.min.js"></script>
-      <script src="/javascripts/plugin.js"></script>
+      <script src="javascripts/jquery.min.js"></script>
+      <script src="javascripts/popper.min.js"></script>
+      <script src="javascripts/bootstrap.bundle.min.js"></script>
+      <script src="javascripts/jquery-3.0.0.min.js"></script>
+      <script src="javascripts/plugin.js"></script>
       <!-- sidebar -->
-      <script src="/javascripts/jquery.mCustomScrollbar.concat.min.js"></script>
-      <script src="/javascripts/custom.js"></script>
+      <script src="javascripts/jquery.mCustomScrollbar.concat.min.js"></script>
+      <script src="javascripts/custom.js"></script>
       <!-- javascript --> 
-      <script src="/javascripts/owl.carousel.js"></script>
+      <script src="javascripts/owl.carousel.js"></script>
       <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
       <script>
          $(document).ready(function(){
@@ -412,37 +380,6 @@
          function closeNav() {
          document.getElementById("myNav").style.width = "0%";
          }
-
-         let userdata = localStorage.getItem('userData');
-         console.log('userdata=====',typeof userdata);
-
-         if(userdata){
-            userdata = JSON.parse(userdata);
-            console.log('userdata=====',typeof userdata);
-
-            document.getElementById('login').style.display = 'none';
-            document.getElementById('registration').style.display = 'none';
-            document.getElementById('logout').style.display = 'block';
-            document.getElementById('user-icon.png').style.display = 'block';
-            document.getElementById('creat-new-post').style.display = 'contents';
-            document.getElementById('mypost').style.display = 'contents';
-            document.getElementById('mypost').href=`/mypost/${userdata.id}`;
-            document.getElementById('view').style.display = 'block';
-
-
-         }
-         
-
-         
-
-
-         function logout(){
-            console.log('logout clicked!!!');
-            localStorage.removeItem('userData');
-            window.location.reload();
-         }
-
-         
       </script>  
    </body>
 </html>

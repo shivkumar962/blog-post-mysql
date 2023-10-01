@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        .body {
+            /* background-color: #289a09; */
+            font-family: Arial, sans-serif;
+        }
+
+        .h1 {
+            padding-left: 20px;
+            color: #d75d11;
+        }
+
+        .div {
+            border: 1px solid #6c0b89;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        .p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body class="body">
+    <h1 class="h1">Profile</h1>
+    <div class="div">
+        <p class="p" id="name">Name: </p>
+        <p class="p" id="email">Email: </p>
+        <p class="p" id="phone">Phone: </p>
+        <p class="p" id="id">ID: </p>
+    </div>
+
+    <script>
+        // Retrieve data from localStorage
+        let data = localStorage.getItem('userData');
+        data = JSON.parse(data);
+
+        // Check if data exists and populate the HTML elements
+        if (data) {
+            document.getElementById('name').textContent += data.name;
+            document.getElementById('email').textContent += data.email;
+            document.getElementById('phone').textContent += data.mobile;
+            document.getElementById('id').textContent += data.id;
+        }
+    </script>
+</body>
+
+</html>

@@ -15,10 +15,29 @@ const getAllPost = (req, res) => {
     }
 
     //console.log("result", result);
+
     res.render('home.ejs', { title: 'Latest Blog List', list: result });
   })
 }
+
 module.exports.getAllPost = getAllPost;
+
+module.exports.getAllPostJSON = (req, res) => {
+  //const sql = `SELECT pkPostId as postId , fkUserId as author, title,createDateTime,updatedDateTime FROM post`;
+  const sql = `SELECT users.firstName, post.*  FROM post
+  LEFT JOIN users ON (post.fkUserId = users.pkUserId)`;
+  dbConnection.query(sql, function (err, result, fields) {
+    if (err) {
+      res.send("error to get post");
+      return;
+    }
+
+    //console.log("result", result);
+
+    res.json(result);
+  })
+}
+
 
 //new post form
 module.exports.createNewPostForm = (req, res) => {
@@ -28,7 +47,7 @@ module.exports.createNewPostForm = (req, res) => {
 //create new post
 module.exports.addNewPost = (req, res) => {
   const data = req.body;
-  console.log("=======req.body deta==========", req.body);
+  //console.log("=======req.body deta==========", req.body);
 
   const sql = `INSERT INTO post (fkUserId, title, content, createDateTime , updatedDateTime ) 
   values(${req.body.userId} , '${req.body.title}', ' ${req.body.content}',now(),now() ) `;
@@ -46,7 +65,7 @@ module.exports.getPostById = (req, res) => {
 
 
   const id = req.params.id;
-  console.log("=======JSON==========", id);
+  //console.log("=======JSON==========", id);
 
   const sql = `SELECT * FROM post`;
   dbConnection.query(sql, function (err, result, fields) {
@@ -102,63 +121,27 @@ module.exports.editPostById = (req, res) => {
   })
 }
 
-module.exports.updatePost = (req, res) => {
-  console.log('req.body-------------->>>>', req.body);
-
-  const sql = `update post set title = '${req.body.title}', content = '${req.body.content}',
-                    updatedDateTime = now() where pkPostId =  '${req.body.id}'`;
-
-  dbConnection.query(sql, function (err, result, fields) {
-    console.log('result', err);
-
-    if (err) {
-      res.send('err get update post')
-      return;
-    }
-    res.redirect('/');
-  })
-
-}
-
-module.exports.deletePost = (req, res) => {
-  // console.log('req.body=======', req.body);
-  // console.log('req.params=======', req.params.id);
-
-  const sql = `delete from post where pkPostId = '${req.params.id}'`;
-  dbConnection.query(sql, function (err, result, fields) {
-    if (err) {
-      res.send('err delete post');
-    }
-    res.redirect('/');
-
-  })
-}
-
 module.exports.registrationForm = (req, res) => {
-  res.render('registrationForm.ejs');
+  res.render('registrationform.ejs');
 
 }
 
 module.exports.succesRegistrationForm = (req, res) => {
-  console.log('req.======================', req.body);
-  let newfiledata = fs.readFileSync(userDataFilePath, { encoding: 'utf8', flag: 'r' });
-  newfiledata = JSON.parse(newfiledata);
-  console.log('newfiledata==old======', newfiledata);
-  let id = (newfiledata[newfiledata.length - 1].id) + 1;
+  //console.log('req.======================', req.body);
+  const sql = `INSERT INTO users (firstName,lastName ,email,mobile,password,createDateTime , updateDateTime )
+  values('${req.body.firstName}','${req.body.lastName}','${req.body.email}',${req.body.mobile},${req.body.password},now(),now() )`;
+  //console.log('resultsql=======',sql);
 
-  let ndata = {
-    id: id,
-    name: req.body.Name,
-    mobile: req.body.mobile,
-    email: req.body.email,
-    password: req.body.password
-  }
-  newfiledata.push(ndata);
-  console.log('newfiledata====new===', newfiledata);
+  dbConnection.query(sql, function (err, result, fields) {
+    //console.log('result=======',result);
 
-  newfiledata = JSON.stringify(newfiledata);
-  fs.writeFileSync(userDataFilePath, newfiledata);
-  res.redirect('/');
+    if (err) {
+      res.send('new rejestraction err');
+    }
+    res.redirect('/');
+
+  })
+
 }
 
 module.exports.loginForm = (req, res) => {
@@ -168,16 +151,17 @@ module.exports.loginForm = (req, res) => {
 
 //login
 module.exports.login = (req, res) => {
-  console.log('req.bodyyyyyyyyy', req.body);
+  //console.log('req.bodyyyyyyyyy', req.body);
   const sql = `SELECT * FROM users WHERE email = '${req.body.email}' AND password = '${req.body.password}'`;
-  console.log("sqlqqqqqqqqqq", sql);
+  //console.log("sqlqqqqqqqqqq", sql);
   dbConnection.query(sql, function (err, result, fields) {
-    console.log('resultttttttttt', result);
+    //console.log('resultttttttttt', result);
     if (result.length == 0) {
       res.send('invalid');
     }
     //user found
     res.render('profile.ejs', { data: result[0] });
+    //res.redirect('/');
   })
 
 
@@ -187,14 +171,14 @@ module.exports.login = (req, res) => {
 module.exports.profile = (req, res) => {
   let userData = null;
   try {
-    console.log("rrrrrrr", req.body);
-    console.log('req.params---------', req.params.uId);
+    //console.log("rrrrrrr", req.body);
+    //console.log('req.params---------', req.params.uId);
     // get user data
 
     const sql = `SELECT * FROM users
     LEFT JOIN post ON users.pkUserId = post.fkUserId where users.pkUserId = '${req.params.uId}'`;
     dbConnection.query(sql, function (err, result, fields) {
-      console.log('result========', result);
+      //console.log('result========', result);
 
       if (err) {
         res.send('invalid profile');
@@ -206,4 +190,155 @@ module.exports.profile = (req, res) => {
   catch (error) {
     console.log('profile page error', error);
   }
+}
+
+//comment
+module.exports.comment = (req, res) => {
+
+  res.render('comment.ejs');
+
+}
+
+//view post
+module.exports.view = (req, res) => {
+  console.log('iddddddd', req.params.viewid);
+  console.log('iddddddd', req.body);
+
+  // const sql = `SELECT users.firstName, post.*  FROM post
+  // LEFT JOIN users ON (post.fkUserId = users.pkUserId)`;
+  const sql = `SELECT * FROM post WHERE pkPostId='${req.params.viewid}'`;
+  dbConnection.query(sql, function (err, result, fields) {
+    //console.log('resulttttttt',result);
+    if (err) {
+      res.send("error to get post");
+      return;
+    }
+
+    //console.log("result", result);
+
+    res.render('view.ejs', { title: 'Latest Blog List', list: result });
+  })
+}
+
+//profile1
+module.exports.profileican = (req, res) => {
+  res.render("profile-ican.ejs");
+}
+
+//about
+module.exports.about = (req, res) => {
+  res.render("about.ejs");
+}
+
+
+//contact
+module.exports.contact = (req, res) => {
+  res.render("contact.ejs");
+}
+
+
+//new post form
+module.exports.createNewPostForm = (req, res) => {
+  res.render('newPostForm.ejs');
+}
+
+//create new post
+module.exports.addNewPost = (req, res) => {
+  const data = req.body;
+  //console.log("=======req.body deta==========", req.body);
+
+  const sql = `INSERT INTO post (fkUserId, title, content, createDateTime , updatedDateTime ) 
+  values(${req.body.userId} , '${req.body.title}', ' ${req.body.content}',now(),now() ) `;
+  dbConnection.query(sql, function (err, result, fields) {
+    if (err) {
+      res.send('add new post err')
+    }
+    res.redirect('/');
+  })
+}
+
+
+//my post 
+module.exports.mypost = (req, res) => {
+  //console.log('req.params55555555555',req.params.id);
+  sql = `select * from post
+  left join users on users.pkUserId = post.fkUserId where users.pkUserId= ${req.params.id}`;
+  dbConnection.query(sql, function (err, result, fields) {
+    //console.log('result7777777777',result);
+    if (err) {
+      res.send('my post err');
+    }
+
+    res.render('myPost.ejs', { userData: result });
+  });
+
+}
+
+
+//edit-post-form 
+module.exports.editPostForm = (req, res) => {
+  //console.log('red.params=======',req.params);
+  const sql = `SELECT * FROM post WHERE pkPostId = ${req.params.id}`;
+  dbConnection.query(sql, function (err, result, fields) {
+    //console.log('results=======',result);
+
+    if (err) {
+      res.send('edit post err');
+    }
+
+    res.render("editpostform.ejs", { post: result[0] });
+  });
+}
+
+//update post
+module.exports.updatePost = (req, res) => {
+  //console.log('req.body-------------->>>>', req.body);
+
+  const sql = `update post set title = '${req.body.title}', content = '${req.body.content}',
+                    updatedDateTime = now() where pkPostId =  '${req.body.id}'`;
+
+  dbConnection.query(sql, function (err, result, fields) {
+    //console.log('result', err);
+
+    if (err) {
+      res.send('err get update post')
+      return;
+    }
+    res.redirect('/');
+  })
+
+}
+
+
+//delete post
+module.exports.deletePost = (req, res) => {
+  console.log('req.body====^===', req.body);
+  console.log('req.params====^===', req.params.id);
+
+  const sql = `DELETE FROM post WHERE pkPostId = ${req.params.id}`;
+  dbConnection.query(sql, function (err, result, fields) {
+    if (err) {
+      res.send('err delete post');
+    }
+    res.redirect('/');
+
+  });
+}
+
+module.exports.Comment = (req, res) => {
+  console.log('req.body', req.body);
+  console.log('req.params', req.params);
+  const sql = `INSERT INTO comments (fkUserId,fkPostId,comment) 
+VALUES (${req.body.userid},${req.body.postid},'${req.body.commit}')`;
+  console.log('sql', sql);
+  dbConnection.query(sql, function (err, result, fields) {
+    if (err) {
+      res.send('comment err');
+      return;
+    }
+    res.redirect('/');
+  });
+
+
+
 }
