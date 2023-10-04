@@ -39,9 +39,18 @@
 
 
 </head>
+<style>
+   .comment-text-box {
+      border: 1px solid;
+      border-radius: 6px;
+      padding: 11px;
+      margin-right: 8px;
+      margin-bottom: 10px;
+   }
+</style>
 
 <body>
-   <%-  include('header.ejs') %>
+   <%- include('header.ejs') %>
 
       <div class="braber_taital_main">
          <div class="row">
@@ -75,11 +84,15 @@
                      </div>
                   </div>
                   <h1>comments</h1>
-                  <div>
-                     
+
+                  <div id="comment-list">
+                     <div class="comment-text-box">
+                        <div> user</div>
+                        <div>user text </div>
+                     </div>
                   </div>
-                  <div>
-                      <style>
+                     <div>
+                     <style>
                         .comment {
                            border-radius: 5px;
                            width: 98.6%;
@@ -87,19 +100,23 @@
                            padding: 10px;
                            background-color: #d0e2bc;
                         }
-                     </style> 
+                     </style>
 
 
-
-                     <form id="comment-form" onsubmit="addNewComment()">
-                        <textarea name="commit" class="comment" placeholder=" Type your comment here."></textarea>
+                     <div id="comment-alert" class="alert alert-success" style="display: none;" role="alert">
+                        Your comment added successfully
+                     </div>
+                     <div id="comment-form">
+                        <textarea id="comment" name="commit" class="comment"
+                           placeholder=" Type your comment here."></textarea>
                         <br>
-                        <input type="hidden" id="user" name="userid">
-                        <input type="hidden" id="post" name="postid" value="<%= list[0].pkPostId %>">
-
-                        <button type="submit" style="border-radius: 3px; background-color: forestgreen;" >comment</button>
-                     </form>
+                        <input type="hidden" id="user-id" name="userid">
+                        <input type="hidden" id="post-id" name="postid" value="<%= list[0].pkPostId %>">
+                        <button onclick="addNewComment()"
+                           style="border-radius: 3px; background-color: forestgreen;">comment</button>
+                     </div>
                   </div>
+
                </div>
             </div>
             <div class="col-lg-6">
@@ -111,81 +128,140 @@
          </div>
       </div>
 
-        
-         <script>
-            let user= localStorage.getItem('userData');
+
+      <script>
+         let user = localStorage.getItem('userData');
+         if (user) {
             user = JSON.parse(user);
-         
-            if(user){
-               document.getElementById("user").value = user.id;
+            // TODO: show comment box when login
+            getAllComment();
+         }
+
+         if (user) {
+            document.getElementById("user").value = user.id;
+         }
+
+         // ------------------------------- add new comment
+         function addNewComment() {
+            if (user) {
+
+               const myHeaders = new Headers();
+               myHeaders.append("Content-Type", "application/json");
+
+               const bodyData = {
+                  commit: document.getElementById('comment').value,
+                  postid: <%= list[0].pkPostId %>,
+                  userid: user.id
+               }
+               console.log('add new post-->>', bodyData);
+               // string : "hello myname"
+               //json string : '{ "name": "narendra",  "age": 12  }'
+               const options = {
+                  method: 'POST',
+                  body: JSON.stringify(bodyData),
+                  headers: myHeaders
+               }
+
+               fetch('http://localhost:3000/comment', options)
+                  .then(res => res.json())
+                  .then(result => {
+                     console.log('result-->>>>', result);
+                     if (result.status == true) {
+                        getAllComment();
+                        // after successs comment, show alert
+                        document.getElementById('comment-alert').style.display = 'block';
+
+                        // hide alert after 3 seconds
+                        setTimeout(() => {
+                           document.getElementById('comment-alert').style.display = 'none';
+                        }, 3000)
+                     }
+                  });
+               console.log('after fetch-->>>>');
             }
-            // -------------------------------
-            
-            // Get the form and button element by their IDs
-            const form = document.getElementById('comment-form');
-            const submitButton = document.getElementById('submitButton');
+         }
 
-            // Add a click event listener to the button
-            submitButton.addEventListener('click', function(event) {
-               // Prevent the default form submission behavior
-               event.preventDefault();
+         function getAllComment() {
+            console.log('get all comment');
+            if (user) {
 
-               // Get the form data
-               const formData = new FormData(form);
+               const myHeaders = new Headers();
+               myHeaders.append("Content-Type", "application/json");
+               // string : "hello myname"
+               //json string : '{ "name": "narendra",  "age": 12  }'
+               const options = {
+                  method: 'GET',
+                  headers: myHeaders
+               }
 
-               // Do something with the form data, for example, send it to the server using AJAX
-               // Here, you can perform form validation, manipulate the data, or send it to a server endpoint
-               // For example:
-               // fetch('/submit', {
-               //     method: 'POST',
-               //     body: formData
-               // })
-               // .then(response => response.json())
-               // .then(data => {
-               //     console.log(data);
-               // })
-               // .catch(error => {
-               //     console.error(error);
-               // });
+               fetch('http://localhost:3000/post-comments/<%= list[0].pkPostId %>', options)
+                  .then(res => res.json())
+                  .then(result => {
+                     console.log('result-->>>>', result);
+                     if (result.status == true) {
+                        // after successs comment, show alert
+                        let htmlList = '';
+                        result.data.forEach(commentObj => {
+                           htmlList += `<div class="comment-text-box">
+                                          <div>${commentObj.comment}</div>
+                                          <div>${commentObj.userName}</div>
+                                       </div>`
+                        });
+                        
+                        document.getElementById('comment-list').innerHTML = htmlList;
+                     }
+                  });
+
+            }
+         }
+
+      </script>
+
+
+
+
+
+
+
+
+
+
+      <script>
+         function openNav() {
+            document.getElementById("myNav").style.width = "100%";
+         }
+         function closeNav() {
+            document.getElementById("myNav").style.width = "0%";
+         }
+      </script>
+      <script src="/javascripts/jquery.min.js"></script>
+      <script src="/javascripts/popper.min.js"></script>
+      <script src="/javascripts/bootstrap.bundle.min.js"></script>
+      <script src="/javascripts/jquery-3.0.0.min.js"></script>
+      <script src="/javascripts/plugin.js"></script>
+      <!-- sidebar -->
+      <script src="/javascripts/jquery.mCustomScrollbar.concat.min.js"></script>
+      <script src="/javascripts/custom.js"></script>
+      <!-- javascript -->
+      <script src="/javascripts/owl.carousel.js"></script>
+      <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+      <script>
+         $(document).ready(function () {
+            $(".fancybox").fancybox({
+               openEffect: "none",
+               closeEffect: "none"
             });
 
-         </script>
-          <script>
-            function openNav() {
-               document.getElementById("myNav").style.width = "100%";
-            }
-            function closeNav() {
-               document.getElementById("myNav").style.width = "0%";
-            }
-         </script>
-         <script src="/javascripts/jquery.min.js"></script>
-         <script src="/javascripts/popper.min.js"></script>
-         <script src="/javascripts/bootstrap.bundle.min.js"></script>
-         <script src="/javascripts/jquery-3.0.0.min.js"></script>
-         <script src="/javascripts/plugin.js"></script>
-         <!-- sidebar -->
-         <script src="/javascripts/jquery.mCustomScrollbar.concat.min.js"></script>
-         <script src="/javascripts/custom.js"></script>
-         <!-- javascript -->
-         <script src="/javascripts/owl.carousel.js"></script>
-         <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-         <script>
-            $(document).ready(function () {
-               $(".fancybox").fancybox({
-                  openEffect: "none",
-                  closeEffect: "none"
-               });
+            $(".zoom").hover(function () {
 
-               $(".zoom").hover(function () {
+               $(this).addClass('transition');
+            }, function () {
 
-                  $(this).addClass('transition');
-               }, function () {
-
-                  $(this).removeClass('transition');
-               });
+               $(this).removeClass('transition');
             });
-         </script>
-        
+         });
+      </script>
+
 </body>
 
 </html>

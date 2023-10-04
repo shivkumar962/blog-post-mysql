@@ -325,6 +325,7 @@ module.exports.deletePost = (req, res) => {
   });
 }
 
+// add new comment in post
 module.exports.Comment = (req, res) => {
   console.log('req.body', req.body);
   console.log('req.params', req.params);
@@ -333,12 +334,28 @@ VALUES (${req.body.userid},${req.body.postid},'${req.body.commit}')`;
   console.log('sql', sql);
   dbConnection.query(sql, function (err, result, fields) {
     if (err) {
-      res.send('comment err');
+      res.json({ status: false, error: 'error to save comment' });
       return;
     }
-    res.redirect('/');
+    res.json({ status: true, data: '' });
   });
 
 
 
+}
+
+//Comment get
+module.exports.getPostAllComments = (req, res) => {
+  console.log('getPostAllComments-->>>>>', req.body);
+  console.log('getPostAllComments-->>>>>query', req.query);
+  console.log('getPostAllComments-->>>>>params', req.params);
+  const sql = `SELECT CM.comment, concat(US.firstName,' ', US.lastName) as userName
+                     FROM comments AS CM 
+                     LEFT JOIN users AS US ON CM.fkUserId = US.pkUserId
+                     WHERE CM.fkPostId = ${req.params.postId}`;
+
+  dbConnection.query(sql, function (err, result, fields) {
+    console.log('resultsssssssss', result);
+      res.json({status: true, data: result});
+  });
 }

@@ -83,6 +83,7 @@
  
     <script>
           let userdata = localStorage.getItem('userData');
+          userdata = JSON.parse(userdata);
          console.log('userdata=====',userdata);
 
          if(userdata){
@@ -92,6 +93,7 @@
             document.getElementById('user-icon.png').style.display = 'block';
             document.getElementById('creat-new-post').style.display = 'contents';
             document.getElementById('mypost').style.display = 'contents';
+            document.getElementById('mypost').href=`/mypost/${userdata.id}`;
 
          }
          

@@ -121,8 +121,8 @@
       <!-- barber section start -->
       <div class="barber_section layout_padding"><h1 class="barber_taital "style="text-align: -webkit-center;" >Public Post</h1>
          <div class="container">
-            <%for(let i = 0; i < list.length; i++){ %>
-               <div class="braber_taital_main">
+            <!-- <%for(let i = 0; i < list.length; i++){ %> -->
+               <!-- <div class="braber_taital_main">
                   <div class="row">
                      <div class="col-lg-6">
                         <div class="barber_bg_main">
@@ -138,7 +138,7 @@
                                        <li id="vie" style="display:;"><a href="/viewpost/<%= list[i].pkPostId %>" >View<span class="padding_10"><i class="fa fa-comment"></i></span></a></li>
                                        <li><a href="#">Like<span class="padding_10"><i class="fa fa-thumbs-up"></i></span></a></li>
                                        <!-- <li><a href="/comment">Comment<span class="padding_10"><i class="fa fa-comment"></i></span></a></li> -->
-                                       <li><a href="#">Share<span class="padding_10"><i class="fa fa-share-alt" aria-hidden="true"></i></span></a></li>
+                                       <!-- <li><a href="#">Share<span class="padding_10"><i class="fa fa-share-alt" aria-hidden="true"></i></span></a></li>
                                     </ul>
                                  </div>
                               </div>
@@ -152,8 +152,11 @@
                         </div>
                      </div>
                   </div>
-               </div>
-            <%}%>
+               </div> --> -->
+            <!-- <%}%> -->
+            <div class="get-all-post" >
+
+            </div>
             
             <!-- <div class="braber_taital_main">
                <div class="row">
@@ -433,13 +436,70 @@
          }
          
 
-         
-
-
-         function logout(){
+          function logout(){
             console.log('logout clicked!!!');
             localStorage.removeItem('userData');
             window.location.reload();
+         }
+
+
+         function getAllpost(){
+            if (userdata) {
+             const myHeaders = new Headers();
+             myHeaders.append("Content-Type", "application/json");
+             
+             const options = {
+               method : "get",
+               headers : myHeaders
+             }
+
+             fetch("http://localhost:3000/",options)
+             .then(res => res.json())
+             .then(result => {
+
+               console.log('resultttttt',result);
+
+               if(result.status == true){
+                 let htmllist = '';
+                 result.list.forEach(element => {
+                  htmllist += `<div class="braber_taital_main">
+                  <div class="row">
+                     <div class="col-lg-6">
+                        <div class="barber_bg_main">
+                           <h1 class="barber_taital">${element.title}</h1>
+                           <p class="barber_text">${element.content}</p>
+                           <div class="blogr_main">
+                              <div class="blogr_left">
+                                 <p class="post_text">Post By :  Blogr</p>
+                              </div>
+                              <div class="blogr_right">
+                                 <div class="comment_text">
+
+                                       <li id="vie" style="display:;"><a href="/viewpost/${element.pkPostId}" >View<span class="padding_10"><i class="fa fa-comment"></i></span></a></li>
+                                       <li><a href="#">Like<span class="padding_10"><i class="fa fa-thumbs-up"></i></span></a></li>
+                                       <!-- <li><a href="/comment">Comment<span class="padding_10"><i class="fa fa-comment"></i></span></a></li> -->
+                                       <li><a href="#">Share<span class="padding_10"><i class="fa fa-share-alt" aria-hidden="true"></i></span></a></li>
+                                    </ul>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-lg-6">
+                        <div class="fashion_img">
+                           <img src="/images/img-1.png" class="fashion_img">
+                           <div class="read_bt"><a href="#">04<br>FEB</a></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>`
+
+                 });
+                 document.getElementById("get-all-post").innerHTML = htmllist;
+               }
+             });
+
+            }
          }
 
          

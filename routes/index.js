@@ -85,8 +85,14 @@ router.post('/update-post', postController.updatePost);
 //delete-user
 router.post('/delete-post/:id', postController.deletePost);
 
-//comment
+//comment post
 router.post('/comment', postController.Comment);
+
+//comment get
+router.get('/post-comments/:postId', postController.getPostAllComments);
+
+
+
 
 
 
