@@ -201,8 +201,8 @@ module.exports.comment = (req, res) => {
 
 //view post
 module.exports.view = (req, res) => {
-  console.log('iddddddd', req.params.viewid);
-  console.log('iddddddd', req.body);
+  //console.log('iddddddd', req.params.viewid);
+  //console.log('iddddddd', req.body);
 
   // const sql = `SELECT users.firstName, post.*  FROM post
   // LEFT JOIN users ON (post.fkUserId = users.pkUserId)`;
@@ -312,8 +312,8 @@ module.exports.updatePost = (req, res) => {
 
 //delete post
 module.exports.deletePost = (req, res) => {
-  console.log('req.body====^===', req.body);
-  console.log('req.params====^===', req.params.id);
+  //console.log('req.body====^===', req.body);
+  //console.log('req.params====^===', req.params.id);
 
   const sql = `DELETE FROM post WHERE pkPostId = ${req.params.id}`;
   dbConnection.query(sql, function (err, result, fields) {
@@ -327,11 +327,11 @@ module.exports.deletePost = (req, res) => {
 
 // add new comment in post
 module.exports.Comment = (req, res) => {
-  console.log('req.body', req.body);
-  console.log('req.params', req.params);
+  //console.log('req.body', req.body);
+  //console.log('req.params', req.params);
   const sql = `INSERT INTO comments (fkUserId,fkPostId,comment) 
 VALUES (${req.body.userid},${req.body.postid},'${req.body.commit}')`;
-  console.log('sql', sql);
+  //console.log('sql', sql);
   dbConnection.query(sql, function (err, result, fields) {
     if (err) {
       res.json({ status: false, error: 'error to save comment' });
@@ -346,16 +346,52 @@ VALUES (${req.body.userid},${req.body.postid},'${req.body.commit}')`;
 
 //Comment get
 module.exports.getPostAllComments = (req, res) => {
-  console.log('getPostAllComments-->>>>>', req.body);
-  console.log('getPostAllComments-->>>>>query', req.query);
-  console.log('getPostAllComments-->>>>>params', req.params);
+  // console.log('getPostAllComments-->>>>>', req.body);
+  // console.log('getPostAllComments-->>>>>query', req.query);
+  // console.log('getPostAllComments-->>>>>params', req.params);
   const sql = `SELECT CM.comment, concat(US.firstName,' ', US.lastName) as userName
                      FROM comments AS CM 
                      LEFT JOIN users AS US ON CM.fkUserId = US.pkUserId
                      WHERE CM.fkPostId = ${req.params.postId}`;
 
   dbConnection.query(sql, function (err, result, fields) {
-    console.log('resultsssssssss', result);
-      res.json({status: true, data: result});
+    //console.log('resultsssssssss', result);
+    res.json({ status: true, data: result });
   });
 }
+
+
+//like post
+module.exports.likePost = (req, res) => {
+ // console.log('req.body=====>', req.body);
+  //console.log('req.params======>', req.params);
+  const sql = `INSERT INTO likes (fkUserId,fkPostId)
+                            VALUES(${req.body.userid},${req.body.postid})`;
+
+  dbConnection.query(sql, function (err, result, fields) {
+    if (err) {
+      res.json({ status: false, error: "err to like" });
+      return;
+    }
+    res.json({ status: true });
+  })
+}
+
+
+//get all like
+module.exports.getAllLike = (req, res) => {
+  console.log('bodydata=====',req.body);
+const sql = `SELECT users.firstName FROM likes  
+             LEFT JOIN users
+             ON likes.fkUserId = users.pkUserId WHERE likes.fkPostId = 3`;
+dbConnection.query(sql, function(err, result, fields){
+  if(err){
+    res.json({status: false, error: 'all post like err'});
+    return;
+  }
+  res.json({status: true, key : result});
+})
+
+
+}
+

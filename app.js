@@ -24,7 +24,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // mongoose.connect('mongodb+srv://skshivkumar888:x7s2t9apVnciAJLd@cluster0.s0tu3gn.mongodb.net',)
 // .then(res=> console.log('db connected')).catch(err=> console.log('error db connection',err));
 
-
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

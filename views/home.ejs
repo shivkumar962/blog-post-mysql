@@ -135,8 +135,9 @@
                               <div class="blogr_right">
                                  <div class="comment_text">
 
-                                       <li id="vie" style="display:;"><a href="/viewpost/<%= list[i].pkPostId %>" >View<span class="padding_10"><i class="fa fa-comment"></i></span></a></li>
-                                       <li><a href="#">Like<span class="padding_10"><i class="fa fa-thumbs-up"></i></span></a></li>
+                                       <li  style="display:;"><a href="/viewpost/<%= list[i].pkPostId %>" id="postid" >View<span class="padding_10"><i class="fa fa-comment"></i></span></a></li>
+                                       <li><button onclick="like(<%= list[i].pkPostId %>)" id="like-post" >Like<span class="padding_10"><i class="fa fa-thumbs-up"></i></span></button></li>
+                                       <div>1</div>
                                         <!-- <li><a href="/comment">Comment<span class="padding_10"><i class="fa fa-comment"></i></span></a></li> 
                                         <li><a href="#">Share<span class="padding_10"><i class="fa fa-share-alt" aria-hidden="true"></i></span></a></li> -->
                                     </ul>
@@ -370,14 +371,62 @@
             document.getElementById('mypost').href=`/mypost/${userdata.id}`;
             document.getElementById('view').style.display = 'block';
 
-
          }
          
 
           function logout(){
-            console.log('logout clicked!!!');
+            //console.log('logout clicked!!!');
             localStorage.removeItem('userData');
             window.location.reload();
+         }
+
+         function like(postId){
+            console.log('like---clicked-->>>',postId);
+            if(userdata){
+               const myHeaders = new Headers();
+               myHeaders.append("Content-Type","application/json")
+
+              const bodydata = {
+               userid: userdata.id,
+                     postid: postId
+               }
+               const options = {
+                  method : "post",
+                  headers: myHeaders,
+                  body: JSON.stringify(bodydata)
+               }
+                     
+                  
+                console.log('opcation======',options);
+               fetch("http://localhost:3000/like",options)
+               .then(res => res.json()) 
+               .then(result => {
+                console.log('like result',result);
+                  if(res.status == true){
+                     getAllLike(postId);
+
+                  }
+
+               });
+            }
+         }
+
+         function getAllLike(id){
+            const myHeaders = new Headers();
+            myHeaders.append("content-type","application/json")
+            const options = {
+               method: 'get',
+               headers: myHeaders,
+               
+            }
+
+            fetch(`http://localhost:3000/getAllLike/${id}`,options)
+            .then(res => res.json())
+            .then(result => {
+               console.log('getalllike fetch result',result);
+
+            })
+
          }
 
     </script>  

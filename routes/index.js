@@ -92,6 +92,12 @@ router.post('/comment', postController.Comment);
 router.get('/post-comments/:postId', postController.getPostAllComments);
 
 
+//like post
+router.post('/like', postController.likePost);
+
+
+//getAllLike
+router.get('/getAllLike', postController.getAllLike);
 
 
 
